@@ -1,6 +1,6 @@
 # Rapid prototyping with postgres dependencies solved
 
-The model is:
+#### The model is:
 1. Anytime we define a new object, we store it's definition in a table in our database (this allows us to store `*` in our queries)
 2. When we want to update a schema/definition we: grab the definition from our table, drop cascade everything dependent on it, redefine it, resave the definition to our table, and restore _everything_ in the database. 
 Restoring everything in the database might seem inelegant, but it's necessary.
@@ -14,7 +14,10 @@ dep_def(name) - quickly grab the definition of an object
 dep_drop(name) - delete a definition
 ```
 
-Here's the workflow I use:
+#### Installation
+Just copy the code in src.psql and run it in your database. Commit any existing views or function definition existing in your database with `dep_commit` applied to each of them. 
+
+#### Here's the workflow I use:
 1. `select * from dep_store order by name` - This shows me everything in my database in a glance and I can quickly see the beginnings of the query definitions for my objects.
 
 2. `drop view myview cascade` - When I want to make a schema change to it
@@ -41,10 +44,10 @@ Eventually we successfully restore everything!
 
 When you want to drop something in your database, you just drop it and have to remember to call `dep_drop('name')` so it doesn't get restored.
 
-**Again, anytime something is changed except tables in my `database,` I commit it with `dep_commit`.**
-
-**I hope this helps people get started. I'm new to postgres too, so I'm definitely open to feedback from people with more experience!**
-
 * Note if you use strings in your queries and you need to commit them, you have to change ' to ''. One single quote becomes two single quotes. 
 * If you already have views and functions in your db, you'll have to commit all of them to use this method.
 * Up until now, I've used the supabase editor for creating tables.
+
+**Again, anytime something is changed except tables in my `database,` I commit it with `dep_commit`.**
+
+**I hope this helps people get started. I'm new to postgres too, so I'm definitely open to feedback from people with more experience!**
