@@ -1,6 +1,6 @@
 # Rapid prototyping with postgres dependencies solved
 
-#### The model is:
+#### The mental framework:
 1. Anytime we define a new object, we store it's definition in a table in our database (this allows us to store `*` in our queries)
 2. When we want to update a schema/definition we: grab the definition from our table, drop cascade everything dependent on it, redefine it, resave the definition to our table, and restore _everything_ in the database. 
 Restoring everything in the database might seem inelegant, but it's necessary.
@@ -14,8 +14,9 @@ dep_def(name) - quickly grab the definition of an object
 dep_drop(name) - delete a definition
 ```
 
-#### Installation
+#### Installation:
 Just copy the code in src.psql and run it in your database. Commit any existing views or function definition existing in your database with `dep_commit` applied to each of them. 
+
 
 #### Here's the workflow I use:
 1. `select * from dep_store order by name` - This shows me everything in my database in a glance and I can quickly see the beginnings of the query definitions for my objects.
