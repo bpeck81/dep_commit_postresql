@@ -1,7 +1,7 @@
 # Rapid prototyping with postgres dependencies solved
 
 #### The mental framework:
-1. Anytime we define a new object, we store it's definition in a table in our database (this allows us to store `*` in our queries)
+1. Anytime we define a new object, we store it's definition in a table in our database (this allows us to store `*` in our queries and propagate schema changes we make to dependencies.)
 2. When we want to update a schema/definition we: grab the definition from our table, drop cascade everything dependent on it, redefine it, resave the definition to our table, and restore _everything_ in the database. 
 Restoring everything in the database might seem inelegant, but it's necessary.
 
