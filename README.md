@@ -5,6 +5,7 @@
 2. When we want to update a schema/definition we: grab the definition from our table, drop cascade everything dependent on it, redefine it, resave the definition to our table, and restore _everything_ in the database. 
 Restoring everything in the database might seem inelegant, but it's necessary.
 
+
 I created a set of functions and table which I pushed to a repo for others to use. The functions are:
 ```
 dep_store -- the table where all your view and function definitions are stored. Schema is (name text, definition text)
@@ -14,8 +15,10 @@ dep_def(name) - quickly grab the definition of an object
 dep_drop(name) - delete a definition
 ```
 
+
 #### Installation:
 Just copy the code in src.psql and run it in your database. Commit any existing views or function definition existing in your database with `dep_commit` applied to each of them. 
+
 
 
 #### Here's the workflow I use:
@@ -44,6 +47,8 @@ Just copy the code in src.psql and run it in your database. Commit any existing 
 Eventually we successfully restore everything!
 
 When you want to drop something in your database, you just drop it and have to remember to call `dep_drop('name')` so it doesn't get restored.
+
+
 
 * Note if you use strings in your queries and you need to commit them, you have to change ' to ''. One single quote becomes two single quotes. 
 * If you already have views and functions in your db, you'll have to commit all of them to use this method.
