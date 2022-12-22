@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS public.dep_store
+(
+    name text COLLATE pg_catalog."default" NOT NULL,
+    definition text COLLATE pg_catalog."default",
+    CONSTRAINT dep_store_pkey PRIMARY KEY (name)
+)
+
+
 CREATE OR REPLACE FUNCTION public.dep_commit(
 	name_input text,
 	definition_input text)
@@ -46,11 +54,4 @@ begin
 		end loop;
 end
 $BODY$;
-
-CREATE TABLE IF NOT EXISTS public.dep_store
-(
-    name text COLLATE pg_catalog."default" NOT NULL,
-    definition text COLLATE pg_catalog."default",
-    CONSTRAINT dep_store_pkey PRIMARY KEY (name)
-)
 
