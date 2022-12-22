@@ -1,0 +1,56 @@
+CREATE OR REPLACE FUNCTION public.dep_commit(
+	name_input text,
+	definition_input text)
+    RETURNS SETOF dep_store 
+    LANGUAGE 'sql'
+AS $BODY$
+insert into dep_store(name, definition) values(name_input, definition_input) on conflict (name) do update set definition=definition_input returning *;
+$BODY$;
+
+CREATE OR REPLACE FUNCTION public.dep_def(
+	name_input text)
+    RETURNS text
+    LANGUAGE 'sql'
+AS $BODY$
+select definition from dep_store where name = name_input;
+$BODY$;
+
+
+CREATE OR REPLACE FUNCTION public.dep_drop(
+	name_input text)
+    RETURNS SETOF dep_store 
+    LANGUAGE 'sql'
+AS $BODY$
+delete from dep_store where name = name_input returning *
+$BODY$;
+
+CREATE OR REPLACE FUNCTION public.dep_restore(
+	)
+    RETURNS SETOF dep_store 
+    LANGUAGE 'plpgsql'
+AS $BODY$
+declare
+_row record;
+_skip record;
+begin
+	for _skip in select * from dep_store
+		loop
+			for _row in select * from dep_store
+				loop
+					begin
+						execute _row.definition;
+						exception when undefined_object or undefined_function or undefined_table then null;
+						when others then raise;
+						end;
+				end loop;
+		end loop;
+end
+$BODY$;
+
+CREATE TABLE IF NOT EXISTS public.dep_store
+(
+    name text COLLATE pg_catalog."default" NOT NULL,
+    definition text COLLATE pg_catalog."default",
+    CONSTRAINT dep_store_pkey PRIMARY KEY (name)
+)
+
