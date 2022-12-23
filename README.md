@@ -57,3 +57,7 @@ When you want to drop something in your database, you just drop it and have to r
 **Again, anytime something is changed except tables in my `database,` I commit it with `dep_commit`.**
 
 **I hope this helps people get started. I'm new to postgres too, so I'm definitely open to feedback from people with more experience!**
+
+
+#### Star me
+If I helped you, please consider giving me a star!
